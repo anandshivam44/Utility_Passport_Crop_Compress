@@ -60,9 +60,17 @@ public class MainActivity extends AppCompatActivity {
                 openGallery();
             }
         });
-        convert.setOnClickListener(new View.OnClickListener() {
+        saveUncompressed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SaveImage(resultBmp);
+            }
+        });
+        compress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(MainActivity.this,MainActivity2.class);
+                startActivity(intent);
 
             }
         });
@@ -122,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
 
                 }
                 imageView.setImageDrawable(new BitmapDrawable(getResources(), resultBmp));
-                SaveImage(resultBmp);
+//                SaveImage(resultBmp);
             }
         });
     }
@@ -149,6 +157,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             FileOutputStream out = new FileOutputStream(ufile);
             finalBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            ImageInRAM.storeImage(ufile);
 
             // sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,
             //     Uri.parse("file://"+ Environment.getExternalStorageDirectory())));

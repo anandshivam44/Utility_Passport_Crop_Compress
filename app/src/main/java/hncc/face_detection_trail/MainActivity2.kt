@@ -35,7 +35,7 @@ import java.util.*
 import kotlin.math.log10
 import kotlin.math.pow
 
-class MainActivity : AppCompatActivity() {
+class MainActivity2 : AppCompatActivity() {
     companion object {
         private const val PICK_IMAGE_REQUEST = 1
     }
@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_main2)
         actualImageView.setBackgroundColor(getRandomColor())
         clearImage()
         setupClickListener()
@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity() {
         actualImage?.let { imageFile ->
             lifecycleScope.launch {
                 // Default compression
-                compressedImage = Compressor.compress(this@MainActivity, imageFile)
+                compressedImage = Compressor.compress(this@MainActivity2, imageFile)
                 setCompressedImage()
             }
         } ?: showError("Please choose an image!")
@@ -86,7 +86,7 @@ class MainActivity : AppCompatActivity() {
                 }*/
 
                 // Full custom
-                compressedImage = Compressor.compress(this@MainActivity, imageFile) {
+                compressedImage = Compressor.compress(this@MainActivity2, imageFile) {
                     resolution(640, 480)
                     quality(75)
                     format(Bitmap.CompressFormat.JPEG)
