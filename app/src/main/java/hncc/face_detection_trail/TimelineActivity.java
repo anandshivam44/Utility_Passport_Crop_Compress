@@ -27,6 +27,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.util.SparseArray;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.vision.Frame;
@@ -60,6 +61,7 @@ public class TimelineActivity extends AppCompatActivity {
     File cfile;
     Context context;
     File myDir;
+    TextView tv_size;
     String root = Environment.getExternalStoragePublicDirectory(
             Environment.DIRECTORY_PICTURES).toString();
 
@@ -70,6 +72,7 @@ public class TimelineActivity extends AppCompatActivity {
         context = this;
 
         imageView = findViewById(R.id.image_v);
+        tv_size=findViewById(R.id.size);
 
         int orientation = LinearLayoutManager.VERTICAL;
         recycler = (RecyclerView) findViewById(R.id.recycler);
@@ -176,6 +179,24 @@ public class TimelineActivity extends AppCompatActivity {
                 timelineView.setFillMarker(true);
             }
             Uri imageUri = data.getData();
+
+//
+//            final String dirPath = f.getAbsolutePath();
+//            String fileName = url.substring(url.lastIndexOf('/') + 1);
+//            File file = new File(dirPath + "/" + fileName);
+//
+//            // Get length of file in bytes
+//            long fileSizeInBytes = file.length();
+//            // Convert the bytes to Kilobytes (1 KB = 1024 Bytes)
+//            long fileSizeInKB = fileSizeInBytes / 1024;
+//            //  Convert the KB to MegaBytes (1 MB = 1024 KBytes)
+//            long fileSizeInMB = fileSizeInKB / 1024;
+//
+//            if (fileSizeInMB > 27) {
+//          ...
+//            }
+
+
             try {
                 bitmapFromGallery = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
             } catch (IOException e) {
@@ -247,7 +268,7 @@ public class TimelineActivity extends AppCompatActivity {
 
         }
         imageView.setImageDrawable(new BitmapDrawable(getResources(), croppedBmp));
-        Toast.makeText(this, "ML Applied", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "ML Applied", Toast.LENGTH_SHORT).show();
     }
 
     private void SaveUncompressedImage(Bitmap finalBitmap) {
@@ -277,7 +298,7 @@ public class TimelineActivity extends AppCompatActivity {
             out.close();
             TimelineView timelineView = recycler.findViewHolderForAdapterPosition(2).itemView.findViewById(R.id.timeline);
             timelineView.setFillMarker(true);
-            Toast.makeText(this, "Saved to /Pictures", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Done", Toast.LENGTH_SHORT).show();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -313,6 +334,17 @@ public class TimelineActivity extends AppCompatActivity {
                         TimelineView timelineView = recycler.findViewHolderForAdapterPosition(3).itemView.findViewById(R.id.timeline);
                         timelineView.setFillMarker(true);
                         Log.d(TAG, "onSuccess: " + Uri.fromFile(file) + " " + file.getAbsolutePath() + " " + file);
+
+                        File dir = new File(context.getFilesDir().getAbsolutePath());
+                        if (dir.exists()) {
+                            for (File f : dir.listFiles()) {
+                                int file_size = Integer.parseInt(String.valueOf(f.length()/1024));
+                                tv_size.setText("Size : "+file_size+" kb");
+                                Bitmap myBitmap = BitmapFactory.decodeFile(f.getAbsolutePath());
+                                imageView.setImageBitmap(myBitmap);
+                            }
+                        }
+
                     }
 
                     @Override
@@ -321,6 +353,13 @@ public class TimelineActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 });
+
+
+
+
+
+//        File file = new File(outputPath + "COMPRESSED_" + String.valueOf(index-1) + ".jpg");
+
     }
 
     private void saveToPictures() {
@@ -366,6 +405,8 @@ public class TimelineActivity extends AppCompatActivity {
             out.flush();
             out.close();
             out = null;
+
+
 
             // delete the original file
             TimelineView timelineView = recycler.findViewHolderForAdapterPosition(4).itemView.findViewById(R.id.timeline);
