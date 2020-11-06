@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     Context context;
     File myDir;
     String root=Environment.getExternalStoragePublicDirectory(
-            Environment.DIRECTORY_PICTURES).toString()+ "/saved_images";
+            Environment.DIRECTORY_PICTURES).toString();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
                     for (File f : dir.listFiles()) {
                         Log.d(TAG, "onClick: "+f.getName().toString());
                         //copyFile(String inputPath, String inputFile, String outputPath)
-                        moveFile(dir.toString()+"/",f.getName(),root);
+                        moveFile(dir.toString()+"/",f.getName(),root+"/");
                     }
                 }
             }
@@ -195,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
 
         root = Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES).toString();
-        myDir = new File(root + "/saved_images");
+        myDir = new File(root + "/");
         myDir.mkdirs();
         Random generator = new Random();
 
@@ -277,15 +277,16 @@ public class MainActivity extends AppCompatActivity {
 
             // delete the original file
             new File(inputPath + inputFile).delete();
+            Toast.makeText(context, "SUCCESS", Toast.LENGTH_SHORT).show();
 
 
         }
 
         catch (FileNotFoundException fnfe1) {
-            Log.e("tag", fnfe1.getMessage());
+            Log.e(TAG, fnfe1.getMessage());
         }
         catch (Exception e) {
-            Log.e("tag", e.getMessage());
+            Log.e(TAG, e.getMessage());
         }
 
     }
@@ -318,6 +319,7 @@ public class MainActivity extends AppCompatActivity {
             out.flush();
             out.close();
             out = null;
+            Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show();
 
         }  catch (FileNotFoundException fnfe1) {
             Log.e(TAG, fnfe1.getMessage());

@@ -21,7 +21,6 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/actualImageView"
                 android:layout_width="0dp"
                 android:layout_height="240dp"
                 android:layout_marginEnd="4dp"
@@ -30,7 +29,6 @@
                 android:adjustViewBounds="true"/>
 
             <ImageView
-                android:id="@+id/compressedImageView"
                 android:layout_width="0dp"
                 android:layout_height="240dp"
                 android:layout_marginLeft="4dp"
@@ -75,7 +73,6 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/actualSizeTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="4dp"
@@ -86,7 +83,6 @@
                 android:textSize="12sp"/>
 
             <TextView
-                android:id="@+id/compressedSizeTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
@@ -99,21 +95,18 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/chooseImageButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="Choose image"/>
 
         <Button
-            android:id="@+id/compressImageButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="Compress image"/>
 
         <Button
-            android:id="@+id/customCompressImageButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
