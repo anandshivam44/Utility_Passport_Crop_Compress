@@ -2,6 +2,7 @@ package hncc.face_detection_trail;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -27,21 +28,35 @@ import com.google.android.gms.vision.face.Face;
 import com.google.android.gms.vision.face.FaceDetector;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Random;
+
+import me.shaohui.advancedluban.Luban;
+import me.shaohui.advancedluban.OnCompressListener;
 //import hncc.face_detection_trail.MainActivity2;
 
 
 public class MainActivity extends AppCompatActivity {
     final String TAG = "MyTag";
-    final  int PICK_IMAGE=101;
+    final int PICK_IMAGE = 101;
     ImageView imageView;
     Button pick;
     Button convert;
     Button saveUncompressed;
     Button compress;
+    Button saveCompresed;
     Bitmap resultBmp;
+    File ufile;
+    File cfile;
+    Context context;
+    File myDir;
+    String root=Environment.getExternalStoragePublicDirectory(
+            Environment.DIRECTORY_PICTURES).toString()+ "/saved_images";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,9 +65,12 @@ public class MainActivity extends AppCompatActivity {
 
         imageView = findViewById(R.id.imageView);
         pick = findViewById(R.id.pick);
-        convert =findViewById(R.id.crop);
-        saveUncompressed=findViewById(R.id.save_uncompressed);
-        compress=findViewById(R.id.compress);
+        convert = findViewById(R.id.crop);
+        saveUncompressed = findViewById(R.id.save_uncompressed);
+        compress = findViewById(R.id.compress);
+        saveCompresed = findViewById(R.id.save_compressed);
+        context=this;
+
 
         pick.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,15 +81,26 @@ public class MainActivity extends AppCompatActivity {
         saveUncompressed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SaveImage(resultBmp);
+                SaveUncompressedImage(resultBmp);
             }
         });
         compress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(MainActivity.this,MainActivity2.class);
-                startActivity(intent);
-
+                compressSingleListener(3);
+            }
+        });
+        saveCompresed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                File dir = new File(context.getFilesDir().getAbsolutePath());
+                if (dir.exists()) {
+                    for (File f : dir.listFiles()) {
+                        Log.d(TAG, "onClick: "+f.getName().toString());
+                        //copyFile(String inputPath, String inputFile, String outputPath)
+                        moveFile(dir.toString()+"/",f.getName(),root);
+                    }
+                }
             }
         });
 
@@ -135,58 +164,59 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    ///////////////////////////////////////
-    private void SaveImage(Bitmap finalBitmap) {
+    void compressSingleListener(int gear) {
+//        if (mFileList.isEmpty()) {
+//            return;
+//        }
+        Luban.compress(ufile, getFilesDir())
+                .putGear(gear)
+                .launch(new OnCompressListener() {
+                    @Override
+                    public void onStart() {
+                        Log.i(TAG, "start");
+                    }
 
-        String root = Environment.getExternalStoragePublicDirectory(
+                    @Override
+                    public void onSuccess(File file) {
+                        Log.i("TAG", file.getAbsolutePath());
+//                        mImageViews.get(0).setImageURI(Uri.fromFile(file));
+                        Toast.makeText(MainActivity.this, "dir - " + Uri.fromFile(file), Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "onSuccess: " + Uri.fromFile(file) + " " + file.getAbsolutePath() + " " + file);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    private void SaveUncompressedImage(Bitmap finalBitmap) {
+
+        root = Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES).toString();
-        File myDir = new File(root + "/saved_images");
+        myDir = new File(root + "/saved_images");
         myDir.mkdirs();
         Random generator = new Random();
 
         int n = 10000;
         n = generator.nextInt(n);
-        String uFname = "Image-" + n + "UNCOMPRESSED.jpg";
-//        String cFname = "Image-" + n + "COMPRESSED.jpg";
-        File ufile = new File(myDir, uFname);
-//        File cfile = new File(myDir, cFname);
-
-
-        ////////////////////UNCOMPRESSED
+        String uFname = "Image-" + n + "_UNCOMPRESSED.jpg";
+        ufile = new File(myDir, uFname);
+        //UNCOMPRESSED IMAGE
         if (ufile.exists()) ufile.delete();
         try {
             FileOutputStream out = new FileOutputStream(ufile);
             finalBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-            ImageInRAM.storeImage(ufile);
-
-            // sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,
-            //     Uri.parse("file://"+ Environment.getExternalStorageDirectory())));
             out.flush();
             out.close();
+            Toast.makeText(this, "Saved to /Pictures", Toast.LENGTH_SHORT).show();
 
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(this, "Image not saved", Toast.LENGTH_LONG).show();
         }
-        ///////////////////COMPRESSED
-//        if (cfile.exists()) cfile.delete();
-//        try {
-//            MainActivity2 obj=new MainActivity2();
-//            Object oooo = obj.compressImage(MainActivity.this, ufile, cfile);
-////            obj.getReadableFileSize()
-////            FileOutputStream out = new FileOutputStream(cfile);
-////            finalBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-////
-////            // sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,
-////            //     Uri.parse("file://"+ Environment.getExternalStorageDirectory())));
-////            out.flush();
-////            out.close();
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            Toast.makeText(this, "Image not saved", Toast.LENGTH_SHORT).show();
-//        }
-        //scan
+        //scan gallery
         MediaScannerConnection.scanFile(this, new String[]{ufile.toString()}, null,
                 new MediaScannerConnection.OnScanCompletedListener() {
                     public void onScanCompleted(String path, Uri uri) {
@@ -195,14 +225,16 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
+
     private void openGallery() {
         Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         startActivityForResult(gallery, PICK_IMAGE);
     }
+
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && requestCode == PICK_IMAGE){
+        if (resultCode == RESULT_OK && requestCode == PICK_IMAGE) {
             Uri imageUri = data.getData();
             Bitmap bitmap = null;
             try {
@@ -212,6 +244,88 @@ public class MainActivity extends AppCompatActivity {
             }
             imageView.setImageBitmap(bitmap);
         }
+    }
+    private void moveFile(String inputPath, String inputFile, String outputPath) {
+
+        InputStream in = null;
+        OutputStream out = null;
+        try {
+
+            //create output directory if it doesn't exist
+            File dir = new File (outputPath);
+            if (!dir.exists())
+            {
+                dir.mkdirs();
+            }
+
+
+            in = new FileInputStream(inputPath + inputFile);
+            out = new FileOutputStream(outputPath + inputFile);
+
+            byte[] buffer = new byte[1024];
+            int read;
+            while ((read = in.read(buffer)) != -1) {
+                out.write(buffer, 0, read);
+            }
+            in.close();
+            in = null;
+
+            // write the output file
+            out.flush();
+            out.close();
+            out = null;
+
+            // delete the original file
+            new File(inputPath + inputFile).delete();
+
+
+        }
+
+        catch (FileNotFoundException fnfe1) {
+            Log.e("tag", fnfe1.getMessage());
+        }
+        catch (Exception e) {
+            Log.e("tag", e.getMessage());
+        }
+
+    }
+    private void copyFile(String inputPath, String inputFile, String outputPath) {
+
+        InputStream in = null;
+        OutputStream out = null;
+        try {
+
+            //create output directory if it doesn't exist
+            File dir = new File (outputPath);
+            if (!dir.exists())
+            {
+                dir.mkdirs();
+            }
+
+
+            in = new FileInputStream(inputPath + inputFile);
+            out = new FileOutputStream(outputPath + inputFile);
+
+            byte[] buffer = new byte[1024];
+            int read;
+            while ((read = in.read(buffer)) != -1) {
+                out.write(buffer, 0, read);
+            }
+            in.close();
+            in = null;
+
+            // write the output file (You have now copied the file)
+            out.flush();
+            out.close();
+            out = null;
+
+        }  catch (FileNotFoundException fnfe1) {
+            Log.e(TAG, fnfe1.getMessage());
+        }
+        catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+        }
+
     }
 
 }

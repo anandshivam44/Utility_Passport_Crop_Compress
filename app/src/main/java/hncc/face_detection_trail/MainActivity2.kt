@@ -49,10 +49,12 @@ class MainActivity2 : AppCompatActivity() {
         actualImageView.setBackgroundColor(getRandomColor())
         clearImage()
         setupClickListener()
+        var file=ImageInRAM.getInstance().file
+
     }
 
     private fun setupClickListener() {
-        chooseImageButton.setOnClickListener { chooseImage() }
+//        chooseImageButton.setOnClickListener { chooseImage() }
         compressImageButton.setOnClickListener { compressImage() }
         customCompressImageButton.setOnClickListener { customCompressImage() }
     }

@@ -70,5 +70,15 @@
             android:background="#1A73E8"
             android:textColor="@android:color/white"
             />
+        <Button
+            android:id="@+id/save_compressed"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="Save Compressed"
+            android:layout_weight="1"
+            android:textAllCaps="false"
+            android:background="#1A73E8"
+            android:textColor="@android:color/white"
+            />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
