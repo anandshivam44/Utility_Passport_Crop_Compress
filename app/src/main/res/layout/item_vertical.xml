@@ -9,10 +9,10 @@
         android:id="@+id/timeline"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginEnd="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
         app:lineColor="@color/colorPrimary"
         app:lineOrientation="vertical"
         app:lineSize="4dp"
@@ -28,24 +28,29 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="8dp">
+        android:layout_marginBottom="4dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginTop="4dp"
+        >
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:gravity="center_vertical"
             android:orientation="horizontal"
             >
 
             <TextView
                 android:id="@+id/tv_text"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:paddingTop="8dp"
                 android:paddingLeft="8dp"
                 android:text="Client"
+                android:textSize="16sp"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
                 android:paddingRight="8dp"
@@ -53,18 +58,16 @@
 
             <Button
                 android:id="@+id/bt_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="100dp"
+                android:layout_height="28dp"
                 android:textAllCaps="false"
-                android:text="Hi"
-                android:background="#1A73E8"
+                android:layout_margin="8dp"
+                android:text="Pick Image"
+                android:textSize="16sp"
+                android:paddingHorizontal="8dp"
+                android:background="@drawable/button_background"
                 android:textColor="@android:color/white"
-                android:paddingTop="4dp"
-                android:paddingLeft="8dp"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:paddingRight="8dp"
-                android:paddingBottom="4dp"/>
+                />
 
         </LinearLayout>
 

@@ -57,7 +57,7 @@ class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHolder> {
 
         // Make first and last markers stroked, others filled
 //        if (position == 0 || position + 1 == getItemCount()) {
-            holder.timelineView.setFillMarker(false);
+//            holder.timelineView.setFillMarker(false);
 //        } else {
 //            holder.timelineView.setFillMarker(true);
 //        }
@@ -113,24 +113,7 @@ class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHolder> {
         @Override
         public void onClick(View v) {
             int position=getAdapterPosition();
-            if (position==0){
-                myInterface.interfaceInvoked(position);
-                timelineView.setFillMarker(true);
-            }
-            else if (position == 1){
-                myInterface.interfaceInvoked(position);
-                timelineView.setFillMarker(true);
-            }
-            else if (position == 2){
-
-            }
-            else if (position == 3){
-
-            }
-            else if (position == 4){
-
-            }
-
+            myInterface.interfaceInvoked(position);
         }
     }
     public interface MyInterface{
